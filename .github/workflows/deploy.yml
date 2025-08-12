@@ -17,7 +17,7 @@ jobs:
     needs: helloworld
     runs-on: ubuntu-latest
     env:
-      # Secrets (asegúrate que existen exactamente con estos nombres)
+      
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
       USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
@@ -61,3 +61,43 @@ jobs:
       - name: Run tests
         run: |
           pytest test_database.py
+  
+  deploy: 
+     needs: test #el test para el jobs
+     runs-on: ubuntu-latest
+     if: github.ref == 'ref/heads/main' 
+       
+     steps:   
+     - name: Install Raliway CLI
+       run: |
+          # Use the official Railway CLI installation method with retry
+          curl -fsSL https://railway.app/install.sh | sh ||{
+          echo "First install attempt failed, trying alternative method..."
+          #Alternative: Download from Github releases (latest)
+          curl -L https://github.com/railwayapp/cli/releases/latest/download/railway-linux-x86_64.tar
+          tar -xzf railway.tar.gz
+          sudo mv railway /usr/local/bin/
+          chmod +x/usr/local/bin/railway
+          }
+
+          # Add to PATH if using first method 
+          if [-d "$HOME/.railway/bin"]; then
+          echo "$HOME/.railway/bin">> $GITHUB_PATH
+          export PATH="$HOME/.railway/bin:$PATH"
+          fi
+
+          #Verify installation
+          ralway --version || railway version || echo "Railway CLI installed but version chech failed"
+     - name: Deploy to Railway
+       env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+       run: |
+        echo "starting deployment..."
+        railway up --service "Altus-api" || \
+        railway up --service Altus-api || \
+        railway up --service web || \
+        railway up --service api || \
+        railway up --service app || \
+        railway up --service Altus || \
+        railway up --service backend || \
+        (echo "creating new service and deploying" && railway up)
