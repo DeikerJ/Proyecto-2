@@ -1,5 +1,5 @@
 import pytest 
-from utils.mongodb import get_mongo_client , t_connection_, get_collection
+from utils.mongodb import get_mongo_client , t_connection, get_collection
 import os 
 from dotenv import  load_dotenv
 
@@ -13,10 +13,7 @@ def test_env_variables():
     print (f"Database:{mongodb_uri}")
 
 
-
-
-
-def t_connection(mongo_client):
+def test_connection():
     try:
         connection_result = t_connection()
         assert connection_result is True, "La conexion a la BD fallo"

@@ -41,4 +41,18 @@ jobs:
           FIREBASE_CRED_PATH: ${{ secrets.FIREBASE_CRED_PATH }}
           USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
         run: |
-          python -c "from main import app; print('FASTAPI app imported succesful')"
+          python -c "from main import app; print('FASTAPI app imported successfully')"
+
+      - name: Run tests
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_CREDENTIALS_BASE64: ${{ secrets.FIREBASE_CREDENTIALS_BASE64 }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          FIREBASE_CRED_PATH: ${{ secrets.FIREBASE_CRED_PATH }}
+          USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
+        run: |
+          pytest -v test_database.py

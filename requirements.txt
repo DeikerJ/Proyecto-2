@@ -3,6 +3,6 @@ pymongo== 4.13.2
 uvicorn==0.35.0
 python-dotenv
 firebase-admin==7.0.0
-firebase-auth==4.0.0
+firebase-auth==3.0.28
 pyjwt
 pytest
