@@ -35,24 +35,24 @@ async def create_comentario(comentario: comentarios) -> comentarios:
         
 #para obtener comentarios por reto
 
-#async def get_comentarios_de_reto(reto_id:str) -> List[dict]:
-   # try: 
-       # cursor = await comentarios_coll.find({"reto_id": reto_id})
-       # return [doc async for doc in cursor]
-   # except Exception as e:
-   #     raise HTTPException(
-   #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-   #         detail=f"Error obteniendo comentarios del reto: {e}"
-   #     )
-   #
+async def get_comentarios_de_reto(reto_id:str) -> List[dict]:
+    try: 
+        cursor = await comentarios_coll.find({"reto_id": reto_id})
+        return [doc async for doc in cursor]
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error obteniendo comentarios del reto: {e}"
+        )
+   
 
-#async def delete_comentario(comentario_id: str):
-   # if not ObjectId.is_valid(comentario_id):
-  #      raise HTTPException(status_code=400, detail="ID inválido")
+async def delete_comentario(comentario_id: str):
+    if not ObjectId.is_valid(comentario_id):
+        raise HTTPException(status_code=400, detail="ID inválido")
 
-   # resultado = await comentarios_coll.delete_one({"_id": ObjectId(comentario_id)})
+    resultado = await comentarios_coll.delete_one({"_id": ObjectId(comentario_id)})
 
-   # if resultado.deleted_count == 0:
-    #    raise HTTPException(status_code=404, detail="Comentario no encontrado")
+    if resultado.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Comentario no encontrado")
 
-   # return {"mensaje": "Comentario eliminado correctamente"}
+    return {"mensaje": "Comentario eliminado correctamente"}

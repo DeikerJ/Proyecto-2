@@ -1,6 +1,5 @@
-from fastapi import FastAPI, HTTPException,Request
+from fastapi import FastAPI,Request
 from pydantic import BaseModel, Field, field_validator
-import re
 import os 
 from models.login import Login
 from utils.security import validateuser, validateadmin
@@ -30,6 +29,7 @@ app.include_router(retos_router)
 app.include_router(categorias_router)
 app.include_router(usuario_router)
 app.include_router(comentarios_router)
+
 
 class UsuarioLogin(BaseModel):
     email: str = Field(
@@ -75,3 +75,31 @@ async def exampleadmin(request:Request):
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    
+    @app.get("/health")
+    def health_check():
+      try:
+         return{
+            "status":"healthy",
+            "timestamp":"2025-08-12",
+            "service":"Altus",
+            "environment":"production"
+        }
+        
+      except Exception as e:
+        return{"status:unhealthy","error",str(e)}   
+    
+    
+@app.get("/ready")
+def readiness_check():
+    try:
+        from utils.mongodb import test_connection
+        db_status = test_connection()
+        return{
+            "status":"ready" if db_status else "not_ready",
+            "database":"connected" if db_status else "disconnected",
+            "service": "Altus"
+        }
+    except Exception as e:
+        return {"status":"not_ready","error":str(e)} 
+        
