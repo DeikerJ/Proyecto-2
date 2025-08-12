@@ -67,6 +67,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - uses: actions/checkout@v4
       - name: Install Railway CLI
         run: |
           # Use the official Railway CLI installation method with retry
