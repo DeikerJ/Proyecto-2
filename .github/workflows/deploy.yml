@@ -2,7 +2,7 @@ name: Deploy to Railway
 
 on:
   push:
-    branches: [main] # Solo para el main
+    branches: [main]
 
 jobs:
   helloworld:
@@ -16,6 +16,16 @@ jobs:
   test:
     needs: helloworld
     runs-on: ubuntu-latest
+    env:
+      # Secrets (asegúrate que existen exactamente con estos nombres)
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
+      FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      FIREBASE_CREDENTIALS_BASE64: ${{ secrets.FIREBASE_CREDENTIALS_BASE64 }}
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,28 +39,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Write Firebase credentials to file (if provided)
+        if: ${{ env.FIREBASE_CREDENTIALS_BASE64 != '' }}
+        run: |
+          echo "$FIREBASE_CREDENTIALS_BASE64" | base64 --decode > ./firebase_credentials.json
+          echo "FIREBASE_CRED_PATH=$(pwd)/firebase_credentials.json" >> $GITHUB_ENV
+
+      - name: Debug env presence (opcional)
+        run: |
+          python - <<'PY'
+          import os
+          keys = ["DATABASE_NAME","MONGODB_URI","FIREBASE_CREDENTIALS_BASE64","FIREBASE_CRED_PATH","RAILWAY_TOKEN"]
+          for k in keys:
+              print(k, "->", bool(os.environ.get(k)))
+          PY
+
       - name: Test FastApi imports
-        env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-          FIREBASE_CREDENTIALS_BASE64: ${{ secrets.FIREBASE_CREDENTIALS_BASE64 }}
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          FIREBASE_CRED_PATH: ${{ secrets.FIREBASE_CRED_PATH }}
-          USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
         run: |
           python -c "from main import app; print('FASTAPI app imported successfully')"
 
       - name: Run tests
-        env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-          FIREBASE_CREDENTIALS_BASE64: ${{ secrets.FIREBASE_CREDENTIALS_BASE64 }}
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          FIREBASE_CRED_PATH: ${{ secrets.FIREBASE_CRED_PATH }}
-          USER_COLLECTION: ${{ secrets.USER_COLLECTION }}
         run: |
-          pytest - test_database.py
+          pytest test_database.py
