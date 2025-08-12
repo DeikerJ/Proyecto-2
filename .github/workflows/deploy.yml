@@ -87,7 +87,7 @@ jobs:
           fi
 
           #Verify installation
-          ralway --version || railway version || echo "Railway CLI installed but version chech failed"
+          railway --version || railway version || echo "Railway CLI installed but version check failed"
      - name: Deploy to Railway
        env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
@@ -98,6 +98,7 @@ jobs:
         railway up --service web || \
         railway up --service api || \
         railway up --service app || \
+        railway up --service Altus-api || \
         railway up --service Altus || \
         railway up --service backend || \
         (echo "creating new service and deploying" && railway up)
