@@ -6,3 +6,4 @@ firebase-admin==7.0.0
 firebase-auth==3.0.28
 pyjwt
 pytest
+motor
