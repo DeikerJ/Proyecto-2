@@ -70,7 +70,7 @@ async def create_user(user: Usuario) -> Usuario:
             password=user.password
         )
     except Exception as e:
-        logger.warning(e)
+        logger.error("Error creando el usuario en firebase")
         raise HTTPException(
             status_code=400,
             detail="Error al registrar usuario en firebase"
