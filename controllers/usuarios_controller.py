@@ -62,6 +62,7 @@ def get_collection(MONGO_URI, MONGO_DB_NAME, USER_COLLECTION):
 
 
 async def create_user(user: Usuario) -> Usuario:
+    initialize_firebase()
     user_record = {}
     try:
         user_record = firebase_auth.create_user(
