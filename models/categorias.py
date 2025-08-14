@@ -24,9 +24,5 @@ class Categoria(BaseModel):
         
     )
     
-    usuario_id: str = Field(
-        description="ID del usuario que creó la categoría",
-        examples=["usuario_123"]
-    )
-    
+
     
