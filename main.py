@@ -30,17 +30,16 @@ app = FastAPI(
 # --- 4. Configurar CORS (¡ESTA ES LA CORRECCIÓN PRINCIPAL!) ---
 # Se especifican los orígenes permitidos. "*" no funciona con credenciales.
 # Esto soluciona el error de CORS que estás viendo.
-origins = [
-    "http://localhost:5173",  # Origen de tu frontend en desarrollo
-    "https://altus-api-production.up.railway.app" # <-- REEMPLAZA con la URL de tu frontend desplegado
-]
-
+    
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "http://localhost:5173",
+        "https://altus-api-production.up.railway.app"  # tu dominio de producción
+    ],
     allow_credentials=True,
-    allow_methods=["*"], # Permite todos los métodos (GET, POST, etc.)
-    allow_headers=["*"], # Permite todos los encabezados
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # --- 5. Definir modelos y endpoints del archivo principal ---
