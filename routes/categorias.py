@@ -13,7 +13,7 @@ from utils.security import validateadmin
 
 router = APIRouter(
     prefix="/categorias",
-    tags=["categorías"]
+    tags=["categorias"]
 )
 
 @router.post("/", response_model=Categoria, tags=["categorías"])

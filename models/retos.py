@@ -10,6 +10,12 @@ class Retos(BaseModel):
        description="MongoDB ID - Se genera automáticamente al crear el reto" 
     )
     
+    tittle: str = Field(
+        default=None,
+        description="Titulo del reto "
+        
+    )
+    
     usuario_id: str = Field(
         description="ID del usuario que creó el reto",
         examples=["usuario_123"]
@@ -22,7 +28,7 @@ class Retos(BaseModel):
         examples=["Descripción detallada del reto"]
     )
     
-    usuario_id_: str = Field(
+    categoria_id_: str = Field(
         description="ID de la categoría a la que pertenece el reto",
         examples=["categoria_123"]
     )
