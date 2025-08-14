@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field, field_validator
 import re
 
 class Login(BaseModel):
-    email: str = Field( alias="correo",
-        description="Correo electrónico del usuario"
+    email: str = Field( alias="email",
+        description="email electrónico del usuario"
     )
     password: str = Field(
         min_length=8,
@@ -19,7 +19,7 @@ class Login(BaseModel):
     def validar_email(cls, value: str):
         patron = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         if not re.match(patron, value):
-            raise ValueError("Correo electrónico no válido")
+            raise ValueError("email electrónico no válido")
         return value
 
     @field_validator("password")

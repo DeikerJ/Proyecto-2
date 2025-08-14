@@ -45,7 +45,7 @@ app.include_router(comentarios_router)
 
 class UsuarioLogin(BaseModel):
     email: str = Field(
-        description="Correo electrónico del usuario",
+        description="email electrónico del usuario",
         pattern=r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     )
 

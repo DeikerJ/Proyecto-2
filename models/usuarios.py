@@ -13,7 +13,7 @@ class Usuario(BaseModel):
         pattern=r"^[a-zA-Z\s]+$"
     )
     email: str = Field(
-        description="Correo electrónico del usuario",
+        description="email electrónico del usuario",
         pattern=r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     )
     active: bool = True
