@@ -10,7 +10,7 @@ class Retos(BaseModel):
        description="MongoDB ID - Se genera automáticamente al crear el reto" 
     )
     
-    tittle: str = Field(
+    title: str = Field(
         default=None,
         description="Titulo del reto "
         
