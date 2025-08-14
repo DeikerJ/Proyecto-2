@@ -28,7 +28,7 @@ class Retos(BaseModel):
         examples=["Descripción detallada del reto"]
     )
     
-    categoria_id_: str = Field(
+    categoria_id: str = Field(
         description="ID de la categoría a la que pertenece el reto",
         examples=["categoria_123"]
     )
