@@ -50,16 +50,6 @@ def initialize_firebase():
         raise HTTPException(status_code=500, detail=f"Error de configuración de Firebase")
 
 
-def get_collection(MONGO_URI, MONGO_DB_NAME, USER_COLLECTION):
-    client = MongoClient(
-        MONGO_URI,
-        server_api=ServerApi("1"),
-        tls=True,
-        tlsAllowInvalidCertificates=True
-    )
-    client.admin.command("ping")
-    return client[MONGO_DB_NAME][USER_COLLECTION]
-
 
 async def create_user(user: Usuario) -> Usuario:
     initialize_firebase()
