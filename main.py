@@ -30,7 +30,7 @@ app = FastAPI(
 # --- 4. Configurar CORS (¡ESTA ES LA CORRECCIÓN PRINCIPAL!) ---
 # Se especifican los orígenes permitidos. "*" no funciona con credenciales.
 # Esto soluciona el error de CORS que estás viendo.
-    
+from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -83,7 +83,5 @@ def readiness_check():
         logging.error(f"Readiness check failed: {e}")
         return {"status": "not_ready", "error": str(e)}
 
-# --- 8. Bloque de ejecución principal (debe ir al final del todo) ---
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
