@@ -32,7 +32,7 @@ app = FastAPI(
 # Esto soluciona el error de CORS que estás viendo.
 origins = [
     "http://localhost:5173",  # Origen de tu frontend en desarrollo
-    "https://tu-frontend-en-produccion.com" # <-- REEMPLAZA con la URL de tu frontend desplegado
+    "https://altus-api-production.up.railway.app" # <-- REEMPLAZA con la URL de tu frontend desplegado
 ]
 
 app.add_middleware(
