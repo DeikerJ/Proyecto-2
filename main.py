@@ -33,10 +33,7 @@ app = FastAPI(
     
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://altus-api-production.up.railway.app"  # tu dominio de producción
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -89,4 +86,4 @@ def readiness_check():
 # --- 8. Bloque de ejecución principal (debe ir al final del todo) ---
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port,reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
