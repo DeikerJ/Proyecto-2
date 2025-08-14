@@ -24,9 +24,8 @@ async def create_categoria_endpoint(
 ) -> Categoria:
     return await create_categoria(categoria)
 
-
 @router.get("/", response_model=list[Categoria])
-async def get_categorias_endpoint(request: Request) -> dict:
+async def get_categorias_endpoint(request: Request) -> list[Categoria]:
     """Obtener todas las categorías"""
     return await get_categorias()
 
