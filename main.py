@@ -1,5 +1,5 @@
 from fastapi import FastAPI,Request
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 import os 
 from models.login import Login
 from utils.security import validateuser, validateadmin
@@ -20,6 +20,18 @@ load_dotenv()
 URI = os.getenv("MONGODB_URI")
 
 app = FastAPI()
+
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials= True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+
+)
+
+
 @app.get("/")
 def read_root():
     return {"version": "0.0.0"}

@@ -9,7 +9,7 @@ DB = os.getenv("DATABASE_NAME")
 URI = os.getenv("MONGODB_URI")
 col = os.getenv("USER_COLLECTION")
 
-# Validate that we have the required environment variables
+
 if not DB:
     raise ValueError("Database name not found. Set DATABASE_NAME or MONGO_DB_NAME environment variable")
 if not URI:
