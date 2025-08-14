@@ -10,7 +10,6 @@ from controllers.categorias_controller import (
     deactivate_categoria
 )
 from utils.security import validateadmin
-from models.categorias import CategoriaConRetos
 
 router = APIRouter(
     prefix="/categorias",
@@ -25,9 +24,10 @@ async def create_categoria_endpoint(
 ) -> Categoria:
     return await create_categoria(categoria)
 
-@router.get("/", response_model=list[CategoriaConRetos])
-async def get_categorias_endpoint(request: Request) -> list[CategoriaConRetos]:
-    """Obtener todas las categorías con conteo y detalle de retos"""
+
+@router.get("/", response_model=list[Categoria])
+async def get_categorias_endpoint(request: Request) -> dict:
+    """Obtener todas las categorías"""
     return await get_categorias()
 
 @router.get("/{categoria_id}", response_model=Categoria, tags=["categorías"])

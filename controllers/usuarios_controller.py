@@ -67,7 +67,7 @@ async def create_user(user: Usuario) -> Usuario:
         )
 
     try:
-        coll = get_collection(MONGO_URI, MONGO_DB_NAME, USER_COLLECTION)
+        coll = get_collection(USER_COLLECTION)
         user_dict = {
             "name": user.name,
             "lastname": user.lastname,
@@ -113,7 +113,7 @@ async def login(user: Login) -> dict:
             detail="Error al autenticar usuario"
         )
 
-    coll = get_collection(MONGO_URI, MONGO_DB_NAME, USER_COLLECTION)
+    coll = get_collection(USER_COLLECTION)
     user_info = coll.find_one({"email": user.email})
 
     if not user_info:
