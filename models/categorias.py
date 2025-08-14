@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
+
 import re
 
 
@@ -24,5 +25,11 @@ class Categoria(BaseModel):
         
     )
     
+class RetoOut(BaseModel):
+    name: str
+    puntos: int
 
+class CategoriaConRetos(Categoria):
+    total_retos: int
+    retos: List[RetoOut]
     
