@@ -35,7 +35,7 @@ async def create_categoria(categoria: Categoria) -> Categoria:
 
         # Verificar duplicado (case‐insensitive)
         dup = await categorias_coll.find_one({
-            "nombre": {"$regex": f"^{name}$", "$options": "i"}
+            "name": {"$regex": f"^{name}$", "$options": "i"}
         })
         if dup:
             raise HTTPException(
@@ -43,7 +43,7 @@ async def create_categoria(categoria: Categoria) -> Categoria:
                 detail="Ya existe una categoría con ese nombre"
             )
 
-        payload = {"nombre": name, "descripcion": text}
+        payload = {"name": name, "text": text}
         res = await categorias_coll.insert_one(payload)
         categoria.id = str(res.inserted_id)
         categoria.name = name
