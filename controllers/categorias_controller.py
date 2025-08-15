@@ -1,4 +1,3 @@
-
 from models.categorias import Categoria
 from utils.mongodb import get_collection
 import os
@@ -100,10 +99,10 @@ async def get_categoria_by_id(categoria_id: str) -> dict:
         )
 
 
-async def update_categoria(categoria_id: str, categoria: Categoria) -> Categoria:
+async def update_categoria(categoria_id: str, categoria: Categoria) -> dict:
     """
     Actualiza nombre y/o descripción de la categoría indicada.
-    Valida unicidad de nombre.
+    Valida unicidad de nombre. Si no hay cambios devuelve la categoría actual.
     """
     try:
         name = categoria.name.strip()
@@ -125,13 +124,20 @@ async def update_categoria(categoria_id: str, categoria: Categoria) -> Categoria
             {"_id": ObjectId(categoria_id)},
             update
         )
-        if result.modified_count == 0:
+
+        # Si no matcheó ningún documento -> no existe
+        if result.matched_count == 0:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Categoría no encontrada o sin cambios"
+                detail="Categoría no encontrada"
             )
 
-        # Devolver la categoría actualizada
+        # Si matched_count == 1 pero modified_count == 0 -> existe pero no hubo cambios
+        if result.modified_count == 0:
+            # Devolver la categoría actual (200) en lugar de 404
+            return await get_categoria_by_id(categoria_id)
+
+        # Si hubo modificaciones, devolver la categoría actualizada
         return await get_categoria_by_id(categoria_id)
 
     except HTTPException:
