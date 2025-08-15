@@ -38,14 +38,16 @@ async def get_reto_by_id(reto_id: str) -> dict:
         return doc
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error obteniendo reto: {e}")
-
-# Modificar reto (actualización parcial)
+    
+    
 async def update_reto(reto_id: str, reto_data: dict) -> dict:
     try:
-        update_fields = {k: v for k, v in reto_data.items() if v is not None}
+        # Solo campos permitidos
+        allowed_fields = {"title", "description", "categoria_id", "activo"}
+        update_fields = {k: v for k, v in reto_data.items() if k in allowed_fields and v is not None}
 
         if not update_fields:
-            raise HTTPException(status_code=400, detail="No hay campos para actualizar")
+            raise HTTPException(status_code=400, detail="No hay campos válidos para actualizar")
 
         result = await retos_coll.update_one(
             {"_id": ObjectId(reto_id)},
@@ -59,14 +61,20 @@ async def update_reto(reto_id: str, reto_data: dict) -> dict:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error actualizando reto: {e}")
 
+
 # Eliminar reto
 async def delete_reto(reto_id: str):
     try:
-        result = await retos_coll.delete_one({"_id": ObjectId(reto_id)})
-        if result.deleted_count == 0:
+        reto = await retos_coll.find_one({"_id": ObjectId(reto_id)})
+        if not reto:
             raise HTTPException(status_code=404, detail="Reto no encontrado")
+        if reto.get("activo", True):
+            raise HTTPException(status_code=400, detail="No se puede eliminar un reto activo")
+        
+        await retos_coll.delete_one({"_id": ObjectId(reto_id)})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error eliminando reto: {e}")
+
 
 # Listar retos por usuario
 async def get_ret_os_by_usuario(usuario_id: str) -> List[dict]:
