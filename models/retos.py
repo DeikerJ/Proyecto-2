@@ -32,3 +32,9 @@ class Retos(BaseModel):
         description="ID de la categoría a la que pertenece el reto",
         examples=["categoria_123"]
     )
+    
+    class RetoUpdate(BaseModel):
+     title: Optional[str] = None
+     description: Optional[str] = None
+     categoria_id: Optional[str] = None
+     activo: Optional[bool] = None
