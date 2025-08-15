@@ -52,7 +52,13 @@ async def update_reto(reto_id: str, reto_data: dict) -> dict:
         result = await retos_coll.update_one(
             {"_id": ObjectId(reto_id)},
             {"$set": update_fields}
+            
+            
         )
+        
+        print("ID recibido:", reto_id)
+        print("Datos recibidos:", reto_data)
+
 
         if result.matched_count == 0:
             raise HTTPException(status_code=404, detail="Reto no encontrado")
